@@ -2,9 +2,12 @@ from django.shortcuts import render, redirect
 from .models import Company, Employee
 from .form import EmployeeForm
 import pandas as pd
+from rest_framework import viewsets
+from .models import Employee, Company
+from .serializers import EmployeeSerializer, CompanySerializer
+
 
 # Create your views here.
-
 def add_employee(request):
     if request.method == "POST":
         form = EmployeeForm(request.POST)
@@ -14,7 +17,6 @@ def add_employee(request):
     else:
         form = EmployeeForm()
     return render(request, 'add_employee.html', {'form': form})
-
 
 def bulk_upload(request):
     if request.method == "POST":
@@ -41,3 +43,11 @@ def bulk_upload(request):
         
         return redirect('employee_list')
     return render(request, 'talent/bulk_uploads.html')
+
+class EmployeeViewSet(viewsets.ModelViewSet):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+
+class CompanyViewSet(viewsets.ModelViewSet):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
