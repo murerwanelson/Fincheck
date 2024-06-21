@@ -1,38 +1,38 @@
 import React, { useState } from 'react';
-import { addEmployee, updateEmployee } from '../services/api';
+import axios from 'axios';
 
-const EmployeeForm = ({ employee = {}, onSave }) => {
-    const [formData, setFormData] = useState(employee);
+const EmployeeForm = ({ onSave }) => {
+  const [name, setName] = useState('');
+  const [company, setCompany] = useState('');
+  const [error, setError] = useState(null);
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post('/api/employees', { name, company });
+      onSave();
+      setName('');
+      setCompany('');
+    } catch (err) {
+      setError(err.response?.data?.message || 'An error occurred while saving the employee.');
+      console.error('Error saving employee:', err);
+    }
+  };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (formData.id) {
-            updateEmployee(formData.id, formData).then(() => onSave());
-        } else {
-            addEmployee(formData).then(() => onSave());
-        }
-    };
-
-    return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>Name:</label>
-                <input type="text" name="name" value={formData.name || ''} onChange={handleChange} required />
-            </div>
-            <div>
-                <label>Company:</label>
-                <input type="text" name="company" value={formData.company || ''} onChange={handleChange} required />
-            </div>
-            <button type="submit">Save</button>
-        </form>
-    );
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>Name:</label>
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+      </div>
+      <div>
+        <label>Company:</label>
+        <input type="text" value={company} onChange={(e) => setCompany(e.target.value)} />
+      </div>
+      <button type="submit">Save</button>
+      {error && <div>Error: {error}</div>}
+    </form>
+  );
 };
 
 export default EmployeeForm;
