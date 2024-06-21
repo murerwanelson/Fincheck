@@ -40,4 +40,4 @@ def bulk_upload(request):
                 continue
         
         return redirect('employee_list')
-    return render(request, 'bulk_upload.html')
+    return render(request, 'talent/bulk_uploads.html')
