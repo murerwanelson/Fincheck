@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Company, Employee
-from .forms import EmployeeForm
+from .form import EmployeeForm
 import pandas as pd
 
 # Create your views here.
