@@ -1,37 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { getEmployees } from '../services/api';
 
 const EmployeeList = () => {
-  const [employees, setEmployees] = useState([]);
-  const [error, setError] = useState(null);
+    const [employees, setEmployees] = useState([]);
 
-  useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        const response = await axios.get('/api/employees');
-        setEmployees(response.data);
-      } catch (err) {
-        setError(err.message);
-        console.error('Error fetching employees:', err);
-      }
-    };
+    useEffect(() => {
+        getEmployees().then(response => {
+            setEmployees(response.data);
+        });
+    }, []);
 
-    fetchEmployees();
-  }, []);
-
-  return (
-    <div>
-      {error ? (
-        <div>Error: {error}</div>
-      ) : (
-        <ul>
-          {employees.map((employee) => (
-            <li key={employee.id}>{employee.name}</li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
+    return (
+        <div>
+            <h1>Employees</h1>
+            <ul>
+                {employees.map(employee => (
+                    <li key={employee.id}>{employee.name} - {employee.company.name}</li>
+                ))}
+            </ul>
+        </div>
+    );
 };
 
 export default EmployeeList;
