@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import './App.css';
 import EmployeeList from './components/EmployeeList';
 import EmployeeForm from './components/EmployeeForm';
 
-function App() {
+const App = () => {
   const [refresh, setRefresh] = useState(false);
 
   const handleSave = () => {
@@ -16,6 +17,6 @@ function App() {
       <EmployeeList key={refresh} />
     </div>
   );
-}
+};
 
 export default App;
