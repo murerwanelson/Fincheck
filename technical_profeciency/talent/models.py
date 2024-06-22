@@ -20,3 +20,6 @@ class Employee(models.Model):
     start_date = models.DateField()
     end_date = models.DateField(blank=True, null=True)
     duties = models.TextField()
+    position = models.CharField(max_length=100, default='Unknown')
+    year_started = models.IntegerField(default=2023) 
+    year_left = models.IntegerField(null=True, blank=True)  
