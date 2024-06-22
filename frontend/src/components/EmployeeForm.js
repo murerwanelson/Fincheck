@@ -1,38 +1,53 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { addEmployee, updateEmployee } from '../services/api';
 
-const EmployeeForm = ({ onSave }) => {
-  const [name, setName] = useState('');
-  const [company, setCompany] = useState('');
-  const [error, setError] = useState(null);
+const EmployeeForm = ({ employee = {}, onSave }) => {
+    const [formData, setFormData] = useState(employee);
+    const [error, setError] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post('/api/employees', { name, company });
-      onSave();
-      setName('');
-      setCompany('');
-    } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred while saving the employee.');
-      console.error('Error saving employee:', err);
-    }
-  };
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Name:</label>
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-      </div>
-      <div>
-        <label>Company:</label>
-        <input type="text" value={company} onChange={(e) => setCompany(e.target.value)} />
-      </div>
-      <button type="submit">Save</button>
-      {error && <div>Error: {error}</div>}
-    </form>
-  );
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setError('');
+        if (formData.id) {
+            updateEmployee(formData.id, formData)
+                .then(() => onSave())
+                .catch(err => {
+                    console.error(err);
+                    setError('An error occurred while updating the employee.');
+                });
+        } else {
+            addEmployee(formData)
+                .then(() => onSave())
+                .catch(err => {
+                    console.error(err);
+                    setError('An error occurred while saving the employee.');
+                });
+        }
+    };
+
+    return (
+        <div>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label>Name:</label>
+                    <input type="text" name="name" value={formData.name || ''} onChange={handleChange} required />
+                </div>
+                <div>
+                    <label>Company:</label>
+                    <input type="text" name="company" value={formData.company || ''} onChange={handleChange} required />
+                </div>
+                <button type="submit">Save</button>
+            </form>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+        </div>
+    );
 };
 
 export default EmployeeForm;
