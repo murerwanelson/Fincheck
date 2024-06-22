@@ -2,10 +2,14 @@ from django.shortcuts import render, redirect
 from .models import Company, Employee
 from .form import EmployeeForm
 import pandas as pd
-from rest_framework import viewsets
+from rest_framework import viewsets,status
 from .models import Employee, Company
 from .serializers import EmployeeSerializer, CompanySerializer
-
+from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics
+from .serializers import EmployeeSerializer
+from django.views.generic import ListView
 
 # Create your views here.
 def add_employee(request):
@@ -48,6 +52,34 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
 
+    def create(self, request, *args, **kwargs):
+        company_name = request.data.get('company')
+        try:
+            company = Company.objects.get(name=company_name)
+        except Company.DoesNotExist:
+            return Response({'error': 'Company not found.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        employee_data = request.data
+        employee_data['company'] = company.id
+
+        serializer = self.get_serializer(data=employee_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
+
+class EmployeeListView(generics.ListAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['name', 'company__name', 'position', 'department', 'year_started', 'year_left']
+
+
+class EmployeeListView(ListView):
+    model = Employee
+    template_name = 'talent/employee_list.html'
+    context_object_name = 'employees'
