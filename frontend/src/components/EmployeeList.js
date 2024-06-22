@@ -1,43 +1,43 @@
+// src/components/EmployeeList.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import SearchForm from './SearchForm';
 
 const EmployeeList = () => {
-  const [employees, setEmployees] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+    const [employees, setEmployees] = useState([]);
+    const [error, setError] = useState('');
 
-  useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get('/api/employees');
-        setEmployees(response.data);
-        setLoading(false);
-      } catch (err) {
-        setError('Unable to fetch employee data. Please try again later.');
-        setLoading(false);
-        console.error('Error fetching employees:', err);
-      }
+    const fetchEmployees = (criteria = {}) => {
+        axios.get('http://127.0.0.1:8000/api/employees/', { params: criteria })
+            .then(response => {
+                setEmployees(response.data);
+            })
+            .catch(err => {
+                console.error(err);
+                setError('An error occurred while fetching employees.');
+            });
     };
 
-    fetchEmployees();
-  }, []);
+    useEffect(() => {
+        fetchEmployees();
+    }, []);
 
-  return (
-    <div>
-      {loading ? (
-        <div>Loading...</div>
-      ) : error ? (
-        <div>Error: {error}</div>
-      ) : (
-        <ul>
-          {employees.map((employee) => (
-            <li key={employee.id}>{employee.name}</li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
+    const handleSearch = (criteria) => {
+        fetchEmployees(criteria);
+    };
+
+    return (
+        <div>
+            <h1>Employees</h1>
+            <SearchForm onSearch={handleSearch} />
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <ul>
+                {employees.map(employee => (
+                    <li key={employee.id}>{employee.name} - {employee.company.name}</li>
+                ))}
+            </ul>
+        </div>
+    );
 };
 
 export default EmployeeList;
