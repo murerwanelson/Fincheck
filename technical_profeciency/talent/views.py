@@ -1,14 +1,12 @@
 from django.shortcuts import render, redirect
 from .models import Company, Employee
-from .form import EmployeeForm
+from .form import EmployeeForm  
 import pandas as pd
-from rest_framework import viewsets,status
-from .models import Employee, Company
+from rest_framework import viewsets, status
 from .serializers import EmployeeSerializer, CompanySerializer
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
-from .serializers import EmployeeSerializer
 from django.views.generic import ListView
 
 # Create your views here.
@@ -20,7 +18,7 @@ def add_employee(request):
             return redirect('employee_list')
     else:
         form = EmployeeForm()
-    return render(request, 'add_employee.html', {'form': form})
+    return render(request, 'talent/add_employee.html', {'form': form})  
 
 def bulk_upload(request):
     if request.method == "POST":
@@ -42,7 +40,6 @@ def bulk_upload(request):
                 )
                 employee.save()
             except Company.DoesNotExist:
-                # Handle the case where the company does not exist
                 continue
         
         return redirect('employee_list')
@@ -72,14 +69,14 @@ class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
 
-class EmployeeListView(generics.ListAPIView):
+class EmployeeListView(generics.ListAPIView):  
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['name', 'company__name', 'position', 'department', 'year_started', 'year_left']
+    filterset_fields = ['name', 'company__name', 'role', 'department', 'start_date', 'end_date'] 
 
-
-class EmployeeListView(ListView):
+class EmployeeTemplateListView(ListView):
     model = Employee
     template_name = 'talent/employee_list.html'
     context_object_name = 'employees'
+  
