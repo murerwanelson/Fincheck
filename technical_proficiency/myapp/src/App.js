@@ -1,25 +1,14 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+// import Employee from './pages/employee';
+// import Company from './pages/company';
+// import Department from './pages/department';
+// import Duty from './pages/duty';
+import BulkUpload from './pages/bulk-upload';
+const App=()=>{
+    return( 
+        <div className="App">
+            <BulkUpload/>
+        </div> 
+    );
 }
 
 export default App;
