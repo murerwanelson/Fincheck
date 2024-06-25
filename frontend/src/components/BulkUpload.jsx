@@ -38,7 +38,7 @@ const BulkUpload = () => {
 
     return (
         <div>
-            <h2>Bulk Upload Employees</h2>
+            <h2>Upload Employees</h2>
             {error && <div className="error">{error}</div>}
             <input type="file" accept=".csv" onChange={handleFileChange} />
             <button onClick={handleUpload}>Upload</button>
