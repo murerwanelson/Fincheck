@@ -124,3 +124,6 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Encryption settings
+FIELD_ENCRYPTION_KEY = 'ab4oCd21ETwaHHeVVB96ekGJYjFIMeGvd1csVrf9gj8='

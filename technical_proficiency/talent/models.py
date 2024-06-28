@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from encrypted_model_fields.fields import EncryptedEmailField, EncryptedCharField
 # Create your models here.
 
 class Company(models.Model):
@@ -7,7 +8,7 @@ class Company(models.Model):
     date_of_reg=models.DateField(default=timezone.now())
     reg_num=models.CharField(max_length=100)
     address=models.CharField(max_length=100) 
-    email=models.EmailField(max_length=100)
+    email = EncryptedEmailField(max_length=100) 
 
     #number of employees, 
     @property
@@ -45,7 +46,7 @@ class Department(models.Model):
 class Employee(models.Model):
     department=models.ForeignKey(Department, on_delete=models.CASCADE)
     name=models.CharField(max_length=100)
-    id_num=models.CharField(max_length=100,null=True, blank=True)
+    id_num = EncryptedCharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.name
