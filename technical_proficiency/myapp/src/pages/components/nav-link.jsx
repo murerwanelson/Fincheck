@@ -1,10 +1,11 @@
-const Link=(props)=>{
+import { Link } from 'react-router-dom';
+const CustomLink=(props)=>{
     return(
-        <a className="icon-link text-dark" href="#">
-                    <ion-icon name={props.icon}></ion-icon>
-                    {props.name}:{props.count}
-                </a>
+        <Link to={props.href} className="icon-link text-dark" >
+            <ion-icon name={props.icon}></ion-icon>
+            {props.name}:{props.count}
+        </Link>
     );
 }
 
-export default Link;
+export default CustomLink;

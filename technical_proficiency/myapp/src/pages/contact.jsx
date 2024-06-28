@@ -1,5 +1,6 @@
-import MultiInput from "./components/multi-input";
+import AddGroup from './components/add_field';
 import Navbar from './components/navbar';
+import SelectField from './components/select_field';
 const links = [
     {
       text: 'departments',
@@ -19,7 +20,6 @@ const links = [
       count: 0,
       href: '/',
     },
-
     {
       text: 'contacts',
       icon: 'call-outline',
@@ -33,14 +33,23 @@ const links = [
         href: '/bulk-upload',
       },
   ];
-const Duty=()=>{
+
+const companies=[
+    "Fincheck",
+    "Bakertilly",
+    "Claxon",
+    "Netflix",
+    "Google",
+
+];
+const Contact=()=>{
     return(
         <>
             <Navbar heading="duty" links={links} />
-            <MultiInput entity="Duty"/>
+            <SelectField options={companies} title="select company" />
+            <AddGroup placeholder="enter employee name" />
         </>
-        
-    );
+    )
 }
 
-export default Duty;
+export default Contact;

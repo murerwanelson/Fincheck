@@ -10,10 +10,11 @@ const MultiInput=(props)=>{
             </div>
             <br />
             <div className="input-group d-flex justify-content-end">
-                <button type="button" class="btn btn-primary">Add {props.entity}</button>
+                <button type="button" className="btn btn-primary">Add {props.entity}</button>
             </div>
         </div>
     );
 }
+
 
 export default MultiInput;
