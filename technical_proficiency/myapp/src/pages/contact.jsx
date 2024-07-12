@@ -1,53 +1,30 @@
 import AddGroup from './components/add_field';
 import Navbar from './components/navbar';
 import SelectField from './components/select_field';
-const links = [
-    {
-      text: 'departments',
-      icon: 'home-outline',
-      count: 0,
-      href: '/department',
-    },
-    {
-      text: 'employees',
-      icon: 'person-outline',
-      count: 0,
-      href: '/employee',
-    },
-    {
-      text: 'companies',
-      icon: 'home-outline',
-      count: 0,
-      href: '/',
-    },
-    {
-      text: 'contacts',
-      icon: 'call-outline',
-      count: 0,
-      href: '/contact',
-    },
-    {
-        text: 'bulk upload',
-        icon: 'cloud-upload-outline',
-        count: 0,
-        href: '/bulk-upload',
-      },
-  ];
-
-const companies=[
-    "Fincheck",
-    "Bakertilly",
-    "Claxon",
-    "Netflix",
-    "Google",
-
-];
+import { getData } from './components/functions/handleSubmit';
+import { useState, useEffect } from 'react';
 const Contact=()=>{
+    const [companies, setCompanies] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const references = await getData('companies');
+        let reference_list=Object.values(references)
+        setCompanies(Object.values(reference_list));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
     return(
         <>
-            <Navbar heading="duty" links={links} />
-            <SelectField options={companies} title="select company" />
-            <AddGroup placeholder="enter employee name" />
+            <Navbar heading="contact" current="contacts"  />
+            <form method="post" action="" >
+                <SelectField options={companies} title="select company" />
+                <AddGroup placeholder="enter employee name" />
+            </form>
         </>
     )
 }

@@ -46,6 +46,7 @@ class Department(models.Model):
 class Employee(models.Model):
     department=models.ForeignKey(Department, on_delete=models.CASCADE)
     name=models.CharField(max_length=100)
+    phone=models.CharField(max_length=20,default='')
     id_num = EncryptedCharField(max_length=100, null=True, blank=True)
 
     def __str__(self):

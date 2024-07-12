@@ -1,9 +1,13 @@
+import './styles.css';
 import { Link } from 'react-router-dom';
 const CustomLink=(props)=>{
     return(
-        <Link to={props.href} className="icon-link text-dark" >
+        props.active?<Link to={props.href} className="icon-link text-light bg-info custom-nav-link" >
             <ion-icon name={props.icon}></ion-icon>
-            {props.name}:{props.count}
+            {props.name}
+        </Link>:<Link to={props.href} className="icon-link text-dark custom-nav-link" >
+            <ion-icon name={props.icon}></ion-icon>
+            {props.name}
         </Link>
     );
 }

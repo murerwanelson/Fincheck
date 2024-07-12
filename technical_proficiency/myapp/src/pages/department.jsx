@@ -1,55 +1,35 @@
+import { useState, useEffect } from 'react';
 import AddGroup from './components/add_field';
 import Navbar from './components/navbar';
 import SelectField from './components/select_field';
-const links = [
-    {
-      text: 'departments',
-      icon: 'home-outline',
-      count: 0,
-      href: '/department',
-    },
-    {
-      text: 'employees',
-      icon: 'person-outline',
-      count: 0,
-      href: '/employee',
-    },
-    {
-      text: 'companies',
-      icon: 'home-outline',
-      count: 0,
-      href: '/',
-    },
-    {
-      text: 'contacts',
-      icon: 'call-outline',
-      count: 0,
-      href: '/contact',
-    },
-    {
-        text: 'bulk upload',
-        icon: 'cloud-upload-outline',
-        count: 0,
-        href: '/bulk-upload',
-      },
-  ];
+import { getData } from './components/functions/handleSubmit';
 
-const companies=[
-    "Fincheck",
-    "Bakertilly",
-    "Claxon",
-    "Netflix",
-    "Google",
+const Department = () => {
+  const [companies, setCompanies] = useState([]);
 
-];
-const Department=()=>{
-    return(
-        <>
-            <Navbar heading="duty" links={links} />
-            <SelectField options={companies} title="select company" />
-            <AddGroup placeholder="enter department name" />
-        </>
-    )
-}
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const references = await getData('companies');
+        let reference_list=Object.values(references)
+        setCompanies(Object.values(reference_list));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+  const fields=['company', 'name'];
+  const host='http://127.0.0.1:8000/api/department'
+  return (
+    <>
+      <Navbar heading="department" current="departments" />
+      <form method="post" action='' onSubmit={(e)=>{handleSubmit(host,e,fields)}}>
+        <SelectField options={companies} title="select company" />
+        <AddGroup placeholder="enter department name" name="name" />
+      </form>
+    </>
+  );
+};
 
 export default Department;

@@ -1,41 +1,28 @@
 import AddGroup from './components/add_field';
 import Navbar from './components/navbar';
-const links = [
-    {
-      text: 'departments',
-      icon: 'home-outline',
-      count: 0,
-      href: '/department',
-    },
-    {
-      text: 'employees',
-      icon: 'person-outline',
-      count: 0,
-      href: '/employee',
-    },
-    {
-      text: 'companies',
-      icon: 'home-outline',
-      count: 0,
-      href: '/',
-    },
-    {
-      text: 'contacts',
-      icon: 'call-outline',
-      count: 0,
-      href: '/contact',
-    },
-    {
-        text: 'bulk upload',
-        icon: 'cloud-upload-outline',
-        count: 0,
-        href: '/bulk-upload',
-      },
-  ];
+import SelectField from './components/select_field';
+import { useState, useEffect } from 'react';
+import { getData } from './components/functions/handleSubmit';
 const Role=()=>{
+    const [employees, setEmployees] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const references = await getData('employees');
+        let reference_list=Object.values(references)
+        setEmployees(Object.values(reference_list));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
     return(
         <>
-            <Navbar heading="duty" links={links} />
+            <Navbar heading="Role" current="role" />
+            <SelectField options={employees} title="select employee" />
             <AddGroup placeholder="enter Role name" />
         </>
     )

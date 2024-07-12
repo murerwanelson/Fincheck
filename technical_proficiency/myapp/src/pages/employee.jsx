@@ -1,51 +1,31 @@
-import MultiInput from "./components/multi-input";
-import SelectField from './components/select_field';
+import EmployeeFields from "./components/employee-fields";
 import Navbar from './components/navbar';
-const links = [
-    {
-      text: 'departments',
-      icon: 'home-outline',
-      count: 0,
-      href: '/department',
-    },
-    {
-      text: 'employees',
-      icon: 'person-outline',
-      count: 0,
-      href: '/employee',
-    },
-    {
-      text: 'companies',
-      icon: 'home-outline',
-      count: 0,
-      href: '/',
-    },
-    {
-      text: 'contacts',
-      icon: 'call-outline',
-      count: 0,
-      href: '/contact',
-    },
-    {
-        text: 'bulk upload',
-        icon: 'cloud-upload-outline',
-        count: 0,
-        href: '/bulk-upload',
-      },
-  ];
-const departments=[
-    "HR",
-    "IT",
-    "Analytics",
-    "Business Development",
-    "Graphics"
-];
+import SelectField from './components/select_field';
+import { getData } from './components/functions/handleSubmit';
+import { useState, useEffect } from 'react';
 const Employee=()=>{
+    const [departments, setDepartments] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const references = await getData('departments');
+        let reference_list=Object.values(references)
+        setDepartments(Object.values(reference_list));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
     return(
         <>
-            <Navbar heading="duty" links={links} />
-            <SelectField options={departments} title="select department" />
-            <MultiInput entity="Employee"/>
+            <Navbar heading="employee" current="employees"/>
+            <form method="post" action="" >
+                <SelectField options={departments} title="select department" />
+                <EmployeeFields entity="Employee"/>
+            </form>
+            
         </>
         
     );
